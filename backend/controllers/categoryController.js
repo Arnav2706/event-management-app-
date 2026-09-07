@@ -18,15 +18,20 @@ exports.getCategories = async (req, res) => {
 exports.createCategory = async (req, res) => {
   try {
     const { name, slug, iconUrl } = req.body;
+    if (!name) {
+      return res.status(400).json({ success: false, message: 'Category name is required' });
+    }
 
-    const categoryExists = await Category.findOne({ slug });
+    const finalSlug = slug || name.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+    const categoryExists = await Category.findOne({ slug: finalSlug });
     if (categoryExists) {
-      return res.status(400).json({ success: false, message: 'Category slug already exists' });
+      return res.status(400).json({ success: false, message: 'Category already exists' });
     }
 
     const category = await Category.create({
       name,
-      slug,
+      slug: finalSlug,
       iconUrl,
     });
 
