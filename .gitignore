@@ -1,0 +1,8 @@
+node_modules/
+.env
+*.pdf
+*.docx
+docs/
+generate_report.js
+generate_pdf.js
+week1_deliverables.md
